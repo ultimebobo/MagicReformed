@@ -1,5 +1,7 @@
 #include "SpellClassifier.h"
 
+ namespace logger = SKSE::log;
+
 SpellClassifier* SpellClassifier::GetSingleton()
 {
     static SpellClassifier singleton;
@@ -95,15 +97,14 @@ Level SpellClassifier::DetectLevel(RE::SpellItem* spell)
         return Level::None;
     }
 
-    // Get spell cost to estimate level (higher cost = higher level)
-    float baseCost = spell->CalculateMagickaCost(nullptr);
-
-    if (baseCost <= 0) {
-        // Try to get cost from effects
+    int32_t level = -1;
+    if (level <= 0) {
+        // Try to get level from effects
         if (!spell->effects.empty()) {
             for (auto* effect : spell->effects) {
-                if (effect && effect->cost > 0) {
-                    baseCost = effect->cost;
+                if (effect && effect->baseEffect != nullptr) {
+                    logger::info("Effect: {}, Skill: {}", effect->baseEffect->GetName(), effect->baseEffect->GetMagickSkill());
+                    level = effect->baseEffect->GetMinimumSkillLevel();
                     break;
                 }
             }
@@ -111,15 +112,17 @@ Level SpellClassifier::DetectLevel(RE::SpellItem* spell)
     }
 
     // Map cost to level (these are approximate ranges)
-    if (baseCost <= 35) {
+    if (level < 25) {
         return Level::Novice;
-    } else if (baseCost <= 50) {
+    } else if (level < 50) {
         return Level::Apprentice;
-    } else if (baseCost <= 90) {
+    } else if (level < 75) {
         return Level::Adept;
-    } else if (baseCost <= 150) {
+    } else if (level < 100) {
         return Level::Expert;
-    } else {
+    } else if (level >= 100) {
         return Level::Master;
+    } else {
+        return Level::None;
     }
 }

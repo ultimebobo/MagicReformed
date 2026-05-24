@@ -19,7 +19,8 @@ void SpellSelector::EquipSpell(std::vector<uint32_t>& sequence) const
     auto* spell = resolver->ResolveSpell(query);
     if (spell) {
         logger::info("Resolved spell: {}", spell->GetName());
-        RE::DebugNotification("Resolved spell: {}", spell->GetName());
+        std::string notification = std::string("Resolved spell: ") + spell->GetName();
+        RE::DebugNotification(notification.c_str());
 
         auto player = RE::PlayerCharacter::GetSingleton();
         if (!player) return;
