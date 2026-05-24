@@ -97,13 +97,12 @@ Level SpellClassifier::DetectLevel(RE::SpellItem* spell)
         return Level::None;
     }
 
-    int32_t level = -1;
+    int32_t level = 0;
     if (level <= 0) {
-        // Try to get level from effects
         if (!spell->effects.empty()) {
             for (auto* effect : spell->effects) {
-                if (effect && effect->baseEffect != nullptr) {
-                    logger::info("Effect: {}, Skill: {}", effect->baseEffect->GetName(), effect->baseEffect->GetMagickSkill());
+                if (effect && effect->baseEffect != nullptr &&
+                    effect->baseEffect->GetMagickSkill() == spell->GetAssociatedSkill()) {
                     level = effect->baseEffect->GetMinimumSkillLevel();
                     break;
                 }
@@ -111,18 +110,15 @@ Level SpellClassifier::DetectLevel(RE::SpellItem* spell)
         }
     }
 
-    // Map cost to level (these are approximate ranges)
-    if (level < 25) {
-        return Level::Novice;
-    } else if (level < 50) {
-        return Level::Apprentice;
-    } else if (level < 75) {
-        return Level::Adept;
-    } else if (level < 100) {
-        return Level::Expert;
-    } else if (level >= 100) {
+    if (level >= 100) {
         return Level::Master;
+    } else if (level >= 75) {
+        return Level::Adept;
+    } else if (level >= 50) {
+        return Level::Adept;
+    } else if (level >= 25) {
+        return Level::Apprentice;
     } else {
-        return Level::None;
+        return Level::Novice;
     }
 }

@@ -35,19 +35,19 @@ endif()
 # Setup your SKSE plugin as an SKSE plugin!
 find_package(CommonLibSSE CONFIG REQUIRED)
 add_commonlibsse_plugin(${PROJECT_NAME} SOURCES
-    plugin.cpp
-    Grammar/GrammarDatabase.cpp
-    Grammar/IncantationParser.cpp
-    IncantationBuffer/IncantationBuffer.cpp
-    Input/InputManager.cpp
-    MagicMode/MagicModeManager.cpp
-    SpellSystem/SpellClassifier.cpp
-    SpellSystem/SpellLogger.cpp
-    SpellSystem/SpellResolver.cpp
-    SpellSelector/SpellSelector.cpp
+    src/plugin.cpp
+    src/Grammar/GrammarDatabase.cpp
+    src/Grammar/IncantationParser.cpp
+    src/IncantationBuffer/IncantationBuffer.cpp
+    src/Input/InputManager.cpp
+    src/MagicMode/MagicModeManager.cpp
+    src/SpellSystem/SpellClassifier.cpp
+    src/SpellSystem/SpellLogger.cpp
+    src/SpellSystem/SpellResolver.cpp
+    src/SpellSelector/SpellSelector.cpp
 )
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23) # <--- use C++23 standard
-target_precompile_headers(${PROJECT_NAME} PRIVATE PCH.h) # <--- PCH.h is required!
+target_precompile_headers(${PROJECT_NAME} PRIVATE src/PCH.h) # <--- PCH.h is required!
 
 # When your SKSE .dll is compiled, this will automatically copy the .dll into your mods folder.
 # Only works if you configure DEPLOY_ROOT above (or set the SKYRIM_MODS_FOLDER environment variable)

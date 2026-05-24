@@ -13,16 +13,8 @@ SpellResolver* SpellResolver::GetSingleton()
 
 bool SpellResolver::IsValidSpell(RE::SpellItem* spell)
 {
-    if (!spell) {
-        return false;
-    }
-
-    if (spell->GetSpellType() != RE::MagicSystem::SpellType::kSpell) {
-
-        return false;
-    }
-
-    return true;
+    return spell && spell->GetSpellType() == RE::MagicSystem::SpellType::kSpell
+        && spell->GetAssociatedSkill() != RE::ActorValue::kNone;
 }
 
 RE::SpellItem* SpellResolver::ResolveSpell(const SpellQuery& query)

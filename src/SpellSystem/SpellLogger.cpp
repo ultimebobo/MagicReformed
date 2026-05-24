@@ -1,5 +1,6 @@
 #include "SpellLogger.h"
 #include "SpellClassifier.h"
+#include "SpellResolver.h"
 
 namespace logger = SKSE::log;
 
@@ -31,17 +32,15 @@ void SpellLogger::LogSpell(RE::SpellItem* spell, const ClassifiedSpell* classifi
     std::string name = GetSpellName(spell);
 
     auto cost = spell->CalculateMagickaCost(nullptr);
-    auto type = static_cast<int>(spell->GetSpellType());
 
-    logger::info("SPELL_LOG|{}|{}|{}|{}|{}|{}|{}|{}",
+    logger::info("SPELL_LOG|{}|{}|{}|{}|{}|{}|{}",
         editorID,
         name,
         SchoolToString(classified->school),
         LevelToString(classified->level),
         DeliveryTypeToString(classified->delivery),
         ElementToString(classified->element),
-        cost,
-        type
+        cost
     );
 }
 
@@ -57,15 +56,17 @@ void SpellLogger::LogPlayerSpells()
     }
 
     logger::info("=== SPELL LOGGING START ===");
-    logger::info("SPELL_LOG|EditorID|Name|School|Level|Delivery|Element|Cost|Type");
+    logger::info("SPELL_LOG|EditorID|Name|School|Level|Delivery|Element|Cost");
 
     auto* classifier = SpellClassifier::GetSingleton();
+    auto* resolver = SpellResolver::GetSingleton();
 
     // Log base spells
     auto* baseSpells = player->GetActorBase()->GetSpellList();
     if (baseSpells && baseSpells->spells) {
         for (uint32_t i = 0; i < baseSpells->numSpells; i++) {
             auto* spell = baseSpells->spells[i];
+            if (!resolver->IsValidSpell(spell)) continue;
             if (spell && spell->GetSpellType() == RE::MagicSystem::SpellType::kSpell) {
                 auto classified = classifier->Classify(spell);
                 LogSpell(spell, &classified);
@@ -76,6 +77,7 @@ void SpellLogger::LogPlayerSpells()
     // Log learned spells
     auto& addedSpells = player->GetActorRuntimeData().addedSpells;
     for (auto* spell : addedSpells) {
+        if (!resolver->IsValidSpell(spell)) continue;
         if (spell && spell->GetSpellType() == RE::MagicSystem::SpellType::kSpell) {
             auto classified = classifier->Classify(spell);
             LogSpell(spell, &classified);
@@ -171,6 +173,6 @@ std::string SpellLogger::GetSpellName(RE::SpellItem* spell)
 void SpellLogger::WriteHeader()
 {
     if (SPELL_LOGGING_ENABLED) {
-        logger::info("SPELL_LOG|EditorID|Name|School|Level|Delivery|Element|Cost|Type");
+        logger::info("SPELL_LOG|EditorID|Name|School|Level|Delivery|Element|Cost");
     }
 }
