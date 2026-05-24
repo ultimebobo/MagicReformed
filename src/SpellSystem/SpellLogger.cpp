@@ -137,6 +137,7 @@ std::string SpellLogger::SchoolToString(School school)
 std::string SpellLogger::LevelToString(Level level)
 {
     switch (level) {
+        case Level::Novice: return "Novice";
         case Level::Apprentice: return "Apprentice";
         case Level::Adept: return "Adept";
         case Level::Expert: return "Expert";

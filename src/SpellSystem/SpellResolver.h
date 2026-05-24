@@ -12,4 +12,6 @@ public:
 
 private:
     SpellResolver() = default;
+
+    bool SpellMatchesQuery(RE::SpellItem* spell, const SpellQuery& query);
 };

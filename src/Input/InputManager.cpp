@@ -96,7 +96,6 @@ RE::BSEventNotifyControl InputManager::ProcessEvent(
                     }
                 }
                 else if (std::ranges::find(magicKeys, keyCode) != std::end(magicKeys) && magicMode->IsActive()) {
-                    logger::info("0 {:X}", keyCode);
                     auto* buffer = IncantationBuffer::GetSingleton();
                     buffer->PushKey(keyCode);
                 }

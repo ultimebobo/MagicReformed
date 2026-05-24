@@ -17,6 +17,23 @@ bool SpellResolver::IsValidSpell(RE::SpellItem* spell)
         && spell->GetAssociatedSkill() != RE::ActorValue::kNone;
 }
 
+bool SpellResolver::SpellMatchesQuery(RE::SpellItem* spell, const SpellQuery& query)
+{
+    if (!IsValidSpell(spell)) {
+        return false;
+    }
+
+    auto* classifier = SpellClassifier::GetSingleton();
+    auto classified = classifier->Classify(spell);
+
+    if (classified.delivery != query.delivery) return false;
+    if (classified.school != query.school) return false;
+    if (classified.level != query.level) return false;
+    if (classified.element != query.element) return false;
+
+    return true;
+}
+
 RE::SpellItem* SpellResolver::ResolveSpell(const SpellQuery& query)
 {
     auto* player = RE::PlayerCharacter::GetSingleton();
@@ -27,7 +44,7 @@ RE::SpellItem* SpellResolver::ResolveSpell(const SpellQuery& query)
     std::vector<RE::SpellItem*> matches;
     auto& addedSpells = player->GetActorRuntimeData().addedSpells;
     auto* classifier = SpellClassifier::GetSingleton();
-    logger::info("Querying spells with criteria:, delivery={}, school={}, level={}", static_cast<int>(query.delivery), static_cast<int>(query.school), static_cast<int>(query.level));
+    logger::info("Querying spells with criteria:, delivery={}, school={}, level={}, element={}", static_cast<int>(query.delivery), static_cast<int>(query.school), static_cast<int>(query.level), static_cast<int>(query.element));
     
     /**
      * Base spells
@@ -35,16 +52,9 @@ RE::SpellItem* SpellResolver::ResolveSpell(const SpellQuery& query)
     auto* baseSpells = player->GetActorBase()->GetSpellList();
     for (uint32_t i = 0; i < baseSpells->numSpells; i++) {
         auto* spell = baseSpells->spells[i];
-        if (!IsValidSpell(spell)) continue;
-
-        auto classified = classifier->Classify(spell);
-
-        // if (classified.element != query.element) continue;
-        if (classified.delivery != query.delivery) continue;
-        if (classified.school != query.school) continue;
-        if (classified.level != query.level) continue;
-
-        matches.push_back(spell);
+        if (SpellMatchesQuery(spell, query)) {
+            matches.push_back(spell);
+        }
     }
     
     logger::info("{} spells to check", addedSpells.size());
@@ -52,16 +62,9 @@ RE::SpellItem* SpellResolver::ResolveSpell(const SpellQuery& query)
      * Learned spells
      */
     for (auto* spell : addedSpells) {
-        if (!IsValidSpell(spell)) continue;
-
-        auto classified = classifier->Classify(spell);
-
-        // if (classified.element != query.element) continue;
-        if (classified.delivery != query.delivery) continue;
-        if (classified.school != query.school) continue;
-        if (classified.level != query.level) continue;
-
-        matches.push_back(spell);
+        if (SpellMatchesQuery(spell, query)) {
+            matches.push_back(spell);
+        }
     }
 
     if (matches.empty()) {

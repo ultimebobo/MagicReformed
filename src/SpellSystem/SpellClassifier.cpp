@@ -26,8 +26,25 @@ Element SpellClassifier::DetectElement(RE::SpellItem* spell)
         return Element::None;
     }
 
-    // TODO: Implement element detection based on spell effects and keywords
-    // For now, default to Arcane
+    if (!spell->effects.empty()) {
+        for (auto* effect : spell->effects) {
+            if (effect && effect->baseEffect != nullptr) {
+                RE::ActorValue resistVariable = effect->baseEffect->data.resistVariable;
+                switch (resistVariable) {
+                    case RE::ActorValue::kResistFire:
+                        return Element::Fire;
+                    case RE::ActorValue::kResistFrost:
+                        return Element::Frost;
+                    case RE::ActorValue::kResistShock:
+                        return Element::Shock;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    
     return Element::Arcane;
 }
 
@@ -97,28 +114,28 @@ Level SpellClassifier::DetectLevel(RE::SpellItem* spell)
         return Level::None;
     }
 
-    int32_t level = 0;
-    if (level <= 0) {
-        if (!spell->effects.empty()) {
-            for (auto* effect : spell->effects) {
-                if (effect && effect->baseEffect != nullptr &&
-                    effect->baseEffect->GetMagickSkill() == spell->GetAssociatedSkill()) {
-                    level = effect->baseEffect->GetMinimumSkillLevel();
-                    break;
-                }
+    int32_t level = -1;
+    if (!spell->effects.empty()) {
+        for (auto* effect : spell->effects) {
+            if (effect && effect->baseEffect != nullptr &&
+                effect->baseEffect->GetMagickSkill() == spell->GetAssociatedSkill()) {
+                level = effect->baseEffect->GetMinimumSkillLevel();
+                break;
             }
         }
     }
 
-    if (level >= 100) {
-        return Level::Master;
-    } else if (level >= 75) {
-        return Level::Adept;
-    } else if (level >= 50) {
-        return Level::Adept;
-    } else if (level >= 25) {
-        return Level::Apprentice;
-    } else {
+    if (level < 25) {
         return Level::Novice;
+    } else if (level < 50) {
+        return Level::Apprentice;
+    } else if (level < 75) {
+        return Level::Adept;
+    } else if (level < 100) {
+        return Level::Expert;
+    } else if (level >= 100) {
+        return Level::Master;
+    } else {
+        return Level::None;
     }
 }
