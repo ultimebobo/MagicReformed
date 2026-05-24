@@ -48,34 +48,34 @@ Element SpellClassifier::DetectElement(RE::SpellItem* spell)
     return Element::Arcane;
 }
 
-DeliveryType SpellClassifier::DetectDelivery(RE::SpellItem* spell)
+Delivery SpellClassifier::DetectDelivery(RE::SpellItem* spell)
 {
     if (!spell) {
-        return DeliveryType::None;
+        return Delivery::None;
     }
 
     auto delivery = spell->GetDelivery();
     switch (delivery) {
         case RE::MagicSystem::Delivery::kSelf:
-            return DeliveryType::Self;
+            return Delivery::Self;
 
         case RE::MagicSystem::Delivery::kTouch:
         case RE::MagicSystem::Delivery::kAimed:
         case RE::MagicSystem::Delivery::kTargetActor:
-            return DeliveryType::Projectile;
+            return Delivery::Projectile;
 
         case RE::MagicSystem::Delivery::kTargetLocation:
-            return DeliveryType::AoE;
+            return Delivery::AoE;
 
         default:
             break;
     }
 
     if (spell->GetCastingType() == RE::MagicSystem::CastingType::kConcentration) {
-        return DeliveryType::Concentration;
+        return Delivery::Concentration;
     }
 
-    return DeliveryType::Projectile;
+    return Delivery::Projectile;
 }
 
 School SpellClassifier::DetectSchool(RE::SpellItem* spell)

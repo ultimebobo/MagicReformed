@@ -38,7 +38,7 @@ void SpellLogger::LogSpell(RE::SpellItem* spell, const ClassifiedSpell* classifi
         name,
         SchoolToString(classified->school),
         LevelToString(classified->level),
-        DeliveryTypeToString(classified->delivery),
+        DeliveryToString(classified->delivery),
         ElementToString(classified->element),
         cost
     );
@@ -108,15 +108,15 @@ std::string SpellLogger::ElementToString(Element element)
     }
 }
 
-std::string SpellLogger::DeliveryTypeToString(DeliveryType delivery)
+std::string SpellLogger::DeliveryToString(Delivery delivery)
 {
     switch (delivery) {
-        case DeliveryType::Projectile: return "Projectile";
-        case DeliveryType::Self: return "Self";
-        case DeliveryType::AoE: return "AoE";
-        case DeliveryType::Concentration: return "Concentration";
-        case DeliveryType::Summon: return "Summon";
-        case DeliveryType::None:
+        case Delivery::Projectile: return "Projectile";
+        case Delivery::Self: return "Self";
+        case Delivery::AoE: return "AoE";
+        case Delivery::Concentration: return "Concentration";
+        case Delivery::Summon: return "Summon";
+        case Delivery::None:
         default: return "None";
     }
 }

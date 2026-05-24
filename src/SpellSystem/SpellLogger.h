@@ -38,7 +38,7 @@ private:
     SpellLogger() = default;
 
     std::string ElementToString(Element element);
-    std::string DeliveryTypeToString(DeliveryType delivery);
+    std::string DeliveryToString(Delivery delivery);
     std::string SchoolToString(School school);
     std::string LevelToString(Level level);
 

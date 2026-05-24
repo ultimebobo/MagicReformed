@@ -10,7 +10,7 @@ enum class Element
     Heal
 };
 
-enum class DeliveryType
+enum class Delivery
 {
     None,
     Projectile,
@@ -43,7 +43,7 @@ enum class Level
 struct SpellQuery
 {
     Element element = Element::None;
-    DeliveryType delivery = DeliveryType::None;
+    Delivery delivery = Delivery::None;
     School school = School::None;
     Level level = Level::None;
 };

@@ -12,7 +12,7 @@ private:
     SpellClassifier() = default;
 
     Element DetectElement(RE::SpellItem* spell);
-    DeliveryType DetectDelivery(RE::SpellItem* spell);
+    Delivery DetectDelivery(RE::SpellItem* spell);
     School DetectSchool(RE::SpellItem* spell);
     Level DetectLevel(RE::SpellItem* spell);
 };

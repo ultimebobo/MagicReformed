@@ -20,11 +20,11 @@ void GrammarDatabase::Initialize()
     _schoolMap[Keys::Numpad2] = School::Restoration;
 
     // Delivery
-    _deliveryMap[Keys::Numpad8] = DeliveryType::Projectile;
-    _deliveryMap[Keys::Numpad2] = DeliveryType::Self;
-    _deliveryMap[Keys::Numpad7] = DeliveryType::AoE;
-    _deliveryMap[Keys::Numpad9] = DeliveryType::Concentration;
-    _deliveryMap[Keys::Numpad5] = DeliveryType::Summon;
+    _deliveryMap[Keys::Numpad8] = Delivery::Projectile;
+    _deliveryMap[Keys::Numpad2] = Delivery::Self;
+    _deliveryMap[Keys::Numpad7] = Delivery::AoE;
+    _deliveryMap[Keys::Numpad9] = Delivery::Concentration;
+    _deliveryMap[Keys::Numpad5] = Delivery::Summon;
 
     // Level
     _levelMap[Keys::Numpad4] = Level::Novice;
@@ -50,13 +50,13 @@ Element GrammarDatabase::GetElement(uint32_t keycode)
     return Element::None;
 }
 
-DeliveryType GrammarDatabase::GetDelivery(uint32_t keycode)
+Delivery GrammarDatabase::GetDelivery(uint32_t keycode)
 {
     if (_deliveryMap.contains(keycode)) {
         return _deliveryMap[keycode];
     }
 
-    return DeliveryType::None;
+    return Delivery::None;
 }
 
 School GrammarDatabase::GetSchool(uint32_t keycode)

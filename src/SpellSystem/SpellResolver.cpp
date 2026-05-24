@@ -26,10 +26,10 @@ bool SpellResolver::SpellMatchesQuery(RE::SpellItem* spell, const SpellQuery& qu
     auto* classifier = SpellClassifier::GetSingleton();
     auto classified = classifier->Classify(spell);
 
-    if (classified.delivery != query.delivery) return false;
-    if (classified.school != query.school) return false;
-    if (classified.level != query.level) return false;
-    if (classified.element != query.element) return false;
+    if (query.delivery != Delivery::None && classified.delivery != query.delivery) return false;
+    if (query.school != School::None && classified.school != query.school) return false;
+    if (query.level != Level::None && classified.level != query.level) return false;
+    if (query.element != Element::None && classified.element != query.element) return false;
 
     return true;
 }
