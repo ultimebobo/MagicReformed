@@ -1,0 +1,16 @@
+#pragma once
+
+#include "SpellTypes.h"
+
+class SpellResolver
+{
+public:
+    static SpellResolver* GetSingleton();
+
+    RE::SpellItem* ResolveSpell(const SpellQuery& query);
+
+private:
+    SpellResolver() = default;
+
+    bool IsValidSpell(RE::SpellItem* spell);
+};
