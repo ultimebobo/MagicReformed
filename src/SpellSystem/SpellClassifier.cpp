@@ -29,6 +29,7 @@ Element SpellClassifier::DetectElement(RE::SpellItem* spell)
     if (!spell->effects.empty()) {
         for (auto* effect : spell->effects) {
             if (effect && effect->baseEffect != nullptr) {
+                // Destruction spells
                 RE::ActorValue resistVariable = effect->baseEffect->data.resistVariable;
                 switch (resistVariable) {
                     case RE::ActorValue::kResistFire:
@@ -40,18 +41,43 @@ Element SpellClassifier::DetectElement(RE::SpellItem* spell)
                     default:
                         break;
                 }
+
+                // Illusion/Restoration spells
+                if (effect->baseEffect->data.flags.all(RE::EffectSetting::EffectSettingData::Flag::kHostile)) {
+                    return Element::Hostile;
+                } else {
+                    return Element::Friendly;
+                }
             }
         }
     }
 
-    
-    return Element::Arcane;
+    return Element::None;
 }
 
 Delivery SpellClassifier::DetectDelivery(RE::SpellItem* spell)
 {
     if (!spell) {
         return Delivery::None;
+    }
+
+    if (!spell->effects.empty()) {
+        for (auto* effect : spell->effects) {
+            if (effect && effect->baseEffect != nullptr) {
+                // Conjuration spells
+                auto archetype = effect->baseEffect->GetArchetype();
+                switch (archetype) {
+                    case RE::EffectSetting::Archetype::kSummonCreature:
+                        return Delivery::Summon;
+                    case RE::EffectSetting::Archetype::kReanimate:
+                        return Delivery::Reanimate;
+                    case RE::EffectSetting::Archetype::kBoundWeapon:
+                        return Delivery::BoundWeapon;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
     auto delivery = spell->GetDelivery();
@@ -71,11 +97,7 @@ Delivery SpellClassifier::DetectDelivery(RE::SpellItem* spell)
             break;
     }
 
-    if (spell->GetCastingType() == RE::MagicSystem::CastingType::kConcentration) {
-        return Delivery::Concentration;
-    }
-
-    return Delivery::Projectile;
+    return Delivery::None;
 }
 
 School SpellClassifier::DetectSchool(RE::SpellItem* spell)

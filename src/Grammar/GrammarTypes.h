@@ -6,8 +6,8 @@ enum class Element
     Fire,
     Frost,
     Shock,
-    Arcane,
-    Heal
+    Hostile,
+    Friendly
 };
 
 enum class Delivery
@@ -16,8 +16,9 @@ enum class Delivery
     Projectile,
     Self,
     AoE,
-    Concentration,
-    Summon
+    Summon,
+    Reanimate,
+    BoundWeapon
 };
 
 enum class School

@@ -101,8 +101,8 @@ std::string SpellLogger::ElementToString(Element element)
         case Element::Fire: return "Fire";
         case Element::Frost: return "Frost";
         case Element::Shock: return "Shock";
-        case Element::Arcane: return "Arcane";
-        case Element::Heal: return "Heal";
+        case Element::Hostile: return "Hostile";
+        case Element::Friendly: return "Friendly";
         case Element::None:
         default: return "None";
     }
@@ -114,8 +114,9 @@ std::string SpellLogger::DeliveryToString(Delivery delivery)
         case Delivery::Projectile: return "Projectile";
         case Delivery::Self: return "Self";
         case Delivery::AoE: return "AoE";
-        case Delivery::Concentration: return "Concentration";
         case Delivery::Summon: return "Summon";
+        case Delivery::Reanimate: return "Reanimate";
+        case Delivery::BoundWeapon: return "BoundWeapon";
         case Delivery::None:
         default: return "None";
     }

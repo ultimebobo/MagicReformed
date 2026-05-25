@@ -23,8 +23,9 @@ void GrammarDatabase::Initialize()
     _deliveryMap[Keys::Numpad8] = Delivery::Projectile;
     _deliveryMap[Keys::Numpad2] = Delivery::Self;
     _deliveryMap[Keys::Numpad7] = Delivery::AoE;
-    _deliveryMap[Keys::Numpad9] = Delivery::Concentration;
     _deliveryMap[Keys::Numpad5] = Delivery::Summon;
+    _deliveryMap[Keys::Numpad9] = Delivery::Reanimate;
+    _deliveryMap[Keys::Numpad1] = Delivery::BoundWeapon;
 
     // Level
     _levelMap[Keys::Numpad4] = Level::Novice;
@@ -37,8 +38,8 @@ void GrammarDatabase::Initialize()
     _elementMap[Keys::Numpad8] = Element::Fire;
     _elementMap[Keys::Numpad7] = Element::Frost;
     _elementMap[Keys::Numpad9] = Element::Shock;
-    _elementMap[Keys::Numpad4] = Element::Arcane;
-    _elementMap[Keys::Numpad2] = Element::Heal;
+    _elementMap[Keys::Numpad4] = Element::Hostile;
+    _elementMap[Keys::Numpad2] = Element::Friendly;
 }
 
 Element GrammarDatabase::GetElement(uint32_t keycode)
