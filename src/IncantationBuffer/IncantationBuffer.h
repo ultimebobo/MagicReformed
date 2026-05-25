@@ -8,13 +8,8 @@ public:
     static IncantationBuffer* GetSingleton();
 
     void PushKey(uint32_t keycode);
-
     void ConfirmSequence();
-
     void CancelSequence();
-
-    void Update();
-
     bool IsEmpty() const;
 
 private:

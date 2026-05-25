@@ -10,8 +10,6 @@ public:
 
     bool IsActive() const;
 
-    void Update();
-
 private:
     MagicModeManager() = default;
 

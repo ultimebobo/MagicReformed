@@ -1,5 +1,6 @@
 #include "MagicModeManager.h"
 #include "../SpellSystem/SpellLogger.h"
+#include "../Equipment/EquipmentSnapshot.h"
 
 MagicModeManager* MagicModeManager::GetSingleton()
 {
@@ -12,6 +13,8 @@ void MagicModeManager::Activate()
     if (_isActive) {
         return;
     }
+
+    EquipmentSnapshot::GetSingleton()->SaveEquipment();
 
     _isActive = true;
 
@@ -26,6 +29,8 @@ void MagicModeManager::Deactivate()
         return;
     }
 
+    EquipmentSnapshot::GetSingleton()->RestoreEquipment();
+
     _isActive = false;
 
     RE::DebugNotification("Magic mode deactivated");
@@ -34,22 +39,4 @@ void MagicModeManager::Deactivate()
 bool MagicModeManager::IsActive() const
 {
     return _isActive;
-}
-
-void MagicModeManager::Update()
-{
-    if (!_isActive) {
-        return;
-    }
-
-    auto player = RE::PlayerCharacter::GetSingleton();
-
-    if (!player) {
-        return;
-    }
-
-    // Auto-disable if player sheathes weapons
-    if (!player->AsActorState()->IsWeaponDrawn()) {
-        Deactivate();
-    }
 }

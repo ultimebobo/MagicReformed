@@ -47,23 +47,6 @@ void IncantationBuffer::CancelSequence()
     Clear();
 }
 
-/**
- * Currently not used
- */
-void IncantationBuffer::Update()
-{
-    if (_sequence.empty()) {
-        return;
-    }
-
-    std::time_t currentTime = std::time(nullptr);
-
-    if (std::difftime(currentTime, _lastInputTime) >= _timeoutDuration) {
-        logger::info("Sequence timeout reached");
-        ConfirmSequence();
-    }
-}
-
 bool IncantationBuffer::IsEmpty() const
 {
     return _sequence.empty();

@@ -25,7 +25,10 @@ void SpellSelector::EquipSpell(std::vector<uint32_t>& sequence) const
         auto player = RE::PlayerCharacter::GetSingleton();
         if (!player) return;
 
-        RE::ActorEquipManager::GetSingleton()->EquipSpell(player, spell, nullptr);
+        auto rightSlot = RE::TESForm::LookupByID<RE::BGSEquipSlot>(0x13F42);
+        auto leftSlot = RE::TESForm::LookupByID<RE::BGSEquipSlot>(0x13F43);
+        RE::ActorEquipManager::GetSingleton()->EquipSpell(player, spell, leftSlot);
+        RE::ActorEquipManager::GetSingleton()->EquipSpell(player, spell, rightSlot);
     }
     else {
         logger::warn("Failed to resolve spell");

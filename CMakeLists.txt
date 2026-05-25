@@ -36,6 +36,7 @@ endif()
 find_package(CommonLibSSE CONFIG REQUIRED)
 add_commonlibsse_plugin(${PROJECT_NAME} SOURCES
     src/plugin.cpp
+    src/Equipment/EquipmentSnapshot.cpp
     src/Grammar/GrammarDatabase.cpp
     src/Grammar/IncantationParser.cpp
     src/IncantationBuffer/IncantationBuffer.cpp
