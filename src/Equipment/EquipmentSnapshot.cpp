@@ -41,10 +41,10 @@ void EquipmentSnapshot::RestoreHand(
             }
         }
         else if (auto* object = savedHand->As<RE::TESBoundObject>()) {
-            // Only equip if the item is still in inventory and not equipped on the other hand
             auto countIt = inventoryCounts.find(object);
             auto* otherHand = player->GetEquippedObject(!leftHand);
-            if (countIt != inventoryCounts.end() && countIt->second > 0 && savedHand != otherHand) {
+            if (countIt != inventoryCounts.end() && countIt->second > 0 // Item is still in inventory
+                && (savedHand != otherHand || countIt->second > 1)) { // Item is not equipped in the other hand, or there are multiple copies
                 equipManager->EquipObject(player, object, nullptr, 1, slot);
             }
         }
