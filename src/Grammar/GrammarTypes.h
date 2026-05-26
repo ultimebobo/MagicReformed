@@ -7,6 +7,7 @@ enum class Element
     Frost,
     Shock,
     Invisibility,
+    Heal,
     Hostile,
     Friendly
 };

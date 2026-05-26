@@ -47,11 +47,16 @@ Element SpellClassifier::DetectElement(RE::SpellItem* spell)
                 switch (archetype) {
                     case RE::EffectSetting::Archetype::kInvisibility:
                         return Element::Invisibility;
+                    case RE::EffectSetting::Archetype::kValueModifier:
+                        if (effect->baseEffect->data.primaryAV == RE::ActorValue::kHealth &&
+                                !effect->baseEffect->data.flags.all(RE::EffectSetting::EffectSettingData::Flag::kHostile)) {
+                            return Element::Heal;
+                        }
                     default:
                         break;
                 }
 
-                // Illusion/Restoration spells
+                // Other spells
                 if (effect->baseEffect->data.flags.all(RE::EffectSetting::EffectSettingData::Flag::kHostile)) {
                     return Element::Hostile;
                 } else {

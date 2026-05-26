@@ -48,8 +48,9 @@ void GrammarDatabase::LoadConfiguration()
     _elementMap[configMgr->GetKeyCode("Element", "Frost", Keys::Numpad7)] = Element::Frost;
     _elementMap[configMgr->GetKeyCode("Element", "Shock", Keys::Numpad9)] = Element::Shock;
     _elementMap[configMgr->GetKeyCode("Element", "Invisibility", Keys::Numpad6)] = Element::Invisibility;
-    _elementMap[configMgr->GetKeyCode("Element", "Hostile", Keys::Numpad4)] = Element::Hostile;
-    _elementMap[configMgr->GetKeyCode("Element", "Friendly", Keys::Numpad2)] = Element::Friendly;
+    _elementMap[configMgr->GetKeyCode("Element", "Heal", Keys::Numpad2)] = Element::Heal;
+    _elementMap[configMgr->GetKeyCode("Element", "Hostile", Keys::Numpad1)] = Element::Hostile;
+    _elementMap[configMgr->GetKeyCode("Element", "Friendly", Keys::Numpad3)] = Element::Friendly;
 }
 
 Element GrammarDatabase::GetElement(uint32_t keycode)

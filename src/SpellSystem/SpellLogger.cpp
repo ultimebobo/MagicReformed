@@ -101,6 +101,7 @@ std::string SpellLogger::ElementToString(Element element)
         case Element::Frost: return "Frost";
         case Element::Shock: return "Shock";
         case Element::Invisibility: return "Invisibility";
+        case Element::Heal: return "Heal";
         case Element::Hostile: return "Hostile";
         case Element::Friendly: return "Friendly";
         case Element::None:
