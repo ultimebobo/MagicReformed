@@ -23,14 +23,14 @@ SpellQuery IncantationParser::Parse(const std::vector<uint32_t>& sequence)
         query.delivery = grammar->GetDelivery(sequence[1]);
     }
 
-    // Third symbol = level
+    // Third symbol = element
     if (sequence.size() >= 3) {
-        query.level = grammar->GetLevel(sequence[2]);
+        query.element = grammar->GetElement(sequence[2]);
     }
 
-    // Fourth symbol = element
+    // Fourth symbol = level
     if (sequence.size() >= 4) {
-        query.element = grammar->GetElement(sequence[3]);
+        query.level = grammar->GetLevel(sequence[3]);
     }
 
     return query;
