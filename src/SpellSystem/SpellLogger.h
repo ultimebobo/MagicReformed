@@ -41,6 +41,7 @@ private:
     std::string DeliveryToString(Delivery delivery);
     std::string SchoolToString(School school);
     std::string LevelToString(Level level);
+    std::string OtherToString(Other other);
 
     std::string GetSpellEditorID(RE::SpellItem* spell);
     std::string GetSpellName(RE::SpellItem* spell);

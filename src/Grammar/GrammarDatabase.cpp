@@ -19,10 +19,10 @@ void GrammarDatabase::LoadConfiguration()
 
     // Load Schools of Magic
     _schoolMap.clear();
-    _schoolMap[configMgr->GetKeyCode("Schools of Magic", "Alteration", Keys::Numpad6)] = School::Alteration;
+    _schoolMap[configMgr->GetKeyCode("Schools of Magic", "Alteration", Keys::Numpad4)] = School::Alteration;
     _schoolMap[configMgr->GetKeyCode("Schools of Magic", "Conjuration", Keys::Numpad5)] = School::Conjuration;
     _schoolMap[configMgr->GetKeyCode("Schools of Magic", "Destruction", Keys::Numpad8)] = School::Destruction;
-    _schoolMap[configMgr->GetKeyCode("Schools of Magic", "Illusion", Keys::Numpad4)] = School::Illusion;
+    _schoolMap[configMgr->GetKeyCode("Schools of Magic", "Illusion", Keys::Numpad6)] = School::Illusion;
     _schoolMap[configMgr->GetKeyCode("Schools of Magic", "Restoration", Keys::Numpad2)] = School::Restoration;
 
     // Load Delivery
@@ -47,6 +47,7 @@ void GrammarDatabase::LoadConfiguration()
     _elementMap[configMgr->GetKeyCode("Element", "Fire", Keys::Numpad8)] = Element::Fire;
     _elementMap[configMgr->GetKeyCode("Element", "Frost", Keys::Numpad7)] = Element::Frost;
     _elementMap[configMgr->GetKeyCode("Element", "Shock", Keys::Numpad9)] = Element::Shock;
+    _elementMap[configMgr->GetKeyCode("Element", "Invisibility", Keys::Numpad6)] = Element::Invisibility;
     _elementMap[configMgr->GetKeyCode("Element", "Hostile", Keys::Numpad4)] = Element::Hostile;
     _elementMap[configMgr->GetKeyCode("Element", "Friendly", Keys::Numpad2)] = Element::Friendly;
 }

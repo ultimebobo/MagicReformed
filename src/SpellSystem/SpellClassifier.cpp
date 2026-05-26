@@ -16,6 +16,7 @@ ClassifiedSpell SpellClassifier::Classify(RE::SpellItem* spell)
     result.delivery = DetectDelivery(spell);
     result.school = DetectSchool(spell);
     result.level = DetectLevel(spell);
+    result.other = DetectOther(spell);
 
     return result;
 }
@@ -38,6 +39,14 @@ Element SpellClassifier::DetectElement(RE::SpellItem* spell)
                         return Element::Frost;
                     case RE::ActorValue::kResistShock:
                         return Element::Shock;
+                    default:
+                        break;
+                }
+
+                auto archetype = effect->baseEffect->GetArchetype();
+                switch (archetype) {
+                    case RE::EffectSetting::Archetype::kInvisibility:
+                        return Element::Invisibility;
                     default:
                         break;
                 }
@@ -160,4 +169,47 @@ Level SpellClassifier::DetectLevel(RE::SpellItem* spell)
     } else {
         return Level::None;
     }
+}
+
+Other SpellClassifier::DetectOther(RE::SpellItem* spell)
+{
+    if (!spell) {
+        return Other::None;
+    }
+
+    if (!spell->effects.empty()) {
+        for (auto* effect : spell->effects) {
+            if (effect && effect->baseEffect != nullptr) {
+                auto archetype = effect->baseEffect->GetArchetype();
+                switch (archetype) {
+                    case RE::EffectSetting::Archetype::kAbsorb:
+                        return Other::Absorb;
+                    case RE::EffectSetting::Archetype::kSoulTrap:
+                        return Other::SoulTrap;
+                    case RE::EffectSetting::Archetype::kDetectLife:
+                        return Other::DetectLife;
+                    case RE::EffectSetting::Archetype::kFrenzy:
+                        return Other::Frenzy;
+                    case RE::EffectSetting::Archetype::kInvisibility:
+                        return Other::Invisibility;
+                    case RE::EffectSetting::Archetype::kLight:
+                        return Other::Light;
+                    case RE::EffectSetting::Archetype::kParalysis:
+                        return Other::Paralyze;
+                    case RE::EffectSetting::Archetype::kReanimate:
+                        return Other::Reanimate;
+                    case RE::EffectSetting::Archetype::kCloak:
+                        return Other::Cloak;
+                    case RE::EffectSetting::Archetype::kOpen:
+                        return Other::Open;
+                    case RE::EffectSetting::Archetype::kTelekinesis:
+                        return Other::Telekinesis;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    return Other::None;
 }

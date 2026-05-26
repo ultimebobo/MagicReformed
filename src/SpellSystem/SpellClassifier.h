@@ -15,4 +15,5 @@ private:
     Delivery DetectDelivery(RE::SpellItem* spell);
     School DetectSchool(RE::SpellItem* spell);
     Level DetectLevel(RE::SpellItem* spell);
+    Other DetectOther(RE::SpellItem* spell);
 };

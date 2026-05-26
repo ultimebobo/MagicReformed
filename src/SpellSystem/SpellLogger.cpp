@@ -27,20 +27,19 @@ void SpellLogger::LogSpell(RE::SpellItem* spell, const ClassifiedSpell* classifi
         classified = &temp;
     }
 
-    // Format: EditorID|Name|School|Level|Delivery|Element|Cost|Type
-    std::string editorID = GetSpellEditorID(spell);
+    // Format: Name|School|Level|Delivery|Element|Cost|Other
     std::string name = GetSpellName(spell);
 
     auto cost = spell->CalculateMagickaCost(nullptr);
 
     logger::info("SPELL_LOG|{}|{}|{}|{}|{}|{}|{}",
-        editorID,
         name,
         SchoolToString(classified->school),
         LevelToString(classified->level),
         DeliveryToString(classified->delivery),
         ElementToString(classified->element),
-        cost
+        cost,
+        OtherToString(classified->other)
     );
 }
 
@@ -56,7 +55,7 @@ void SpellLogger::LogPlayerSpells()
     }
 
     logger::info("=== SPELL LOGGING START ===");
-    logger::info("SPELL_LOG|EditorID|Name|School|Level|Delivery|Element|Cost");
+    logger::info("SPELL_LOG|Name|School|Level|Delivery|Element|Cost|Other");
 
     auto* classifier = SpellClassifier::GetSingleton();
     auto* resolver = SpellResolver::GetSingleton();
@@ -101,6 +100,7 @@ std::string SpellLogger::ElementToString(Element element)
         case Element::Fire: return "Fire";
         case Element::Frost: return "Frost";
         case Element::Shock: return "Shock";
+        case Element::Invisibility: return "Invisibility";
         case Element::Hostile: return "Hostile";
         case Element::Friendly: return "Friendly";
         case Element::None:
@@ -148,16 +148,23 @@ std::string SpellLogger::LevelToString(Level level)
     }
 }
 
-std::string SpellLogger::GetSpellEditorID(RE::SpellItem* spell)
+std::string SpellLogger::OtherToString(Other other)
 {
-    if (!spell) return "Unknown";
-    
-    auto editorID = spell->GetFormEditorID();
-    if (editorID) {
-        return std::string(editorID);
+    switch (other) {
+        case Other::Absorb: return "Absorb";
+        case Other::SoulTrap: return "SoulTrap";
+        case Other::DetectLife: return "DetectLife";
+        case Other::Frenzy: return "Frenzy";
+        case Other::Invisibility: return "Invisibility";
+        case Other::Light: return "Light";
+        case Other::Paralyze: return "Paralyze";
+        case Other::Reanimate: return "Reanimate";
+        case Other::Cloak: return "Cloak";
+        case Other::Open: return "Open";
+        case Other::Telekinesis: return "Telekinesis";
+        case Other::None:
+        default: return "None";
     }
-    
-    return "Unknown";
 }
 
 std::string SpellLogger::GetSpellName(RE::SpellItem* spell)
@@ -175,6 +182,6 @@ std::string SpellLogger::GetSpellName(RE::SpellItem* spell)
 void SpellLogger::WriteHeader()
 {
     if (SPELL_LOGGING_ENABLED) {
-        logger::info("SPELL_LOG|EditorID|Name|School|Level|Delivery|Element|Cost");
+        logger::info("SPELL_LOG|Name|School|Level|Delivery|Element|Cost|Other");
     }
 }

@@ -10,4 +10,5 @@ struct ClassifiedSpell
     Delivery delivery = Delivery::None;
     School school = School::None;
     Level level = Level::None;
+    Other other = Other::None;
 };

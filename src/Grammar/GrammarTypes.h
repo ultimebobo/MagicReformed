@@ -6,6 +6,7 @@ enum class Element
     Fire,
     Frost,
     Shock,
+    Invisibility,
     Hostile,
     Friendly
 };
@@ -41,10 +42,28 @@ enum class Level
     Master
 };
 
+// Used to get info, not in the actual grammar
+enum class Other
+{
+    None,
+    Absorb,
+    SoulTrap,
+    DetectLife,
+    Frenzy,
+    Invisibility,
+    Light,
+    Paralyze,
+    Reanimate,
+    Cloak,
+    Open,
+    Telekinesis
+};
+
 struct SpellQuery
 {
     Element element = Element::None;
     Delivery delivery = Delivery::None;
     School school = School::None;
     Level level = Level::None;
+    Other other = Other::None;
 };
