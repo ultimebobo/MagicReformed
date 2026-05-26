@@ -17,9 +17,5 @@ private:
 
 private:
     std::vector<uint32_t> _sequence;
-
-    std::time_t _lastInputTime = 0;
-
-    // Seconds before auto-confirm
-    const double _timeoutDuration = 1.2;
+    uint32_t _confirmKey = 0;
 };

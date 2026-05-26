@@ -15,7 +15,7 @@ public:
     static SpellLogger* GetSingleton();
 
     // Enable/disable logging - change this to toggle logging on/off
-    static constexpr bool SPELL_LOGGING_ENABLED = true;
+    static constexpr bool SPELL_LOGGING_ENABLED = false;
 
     /**
      * @brief Log all spell attributes

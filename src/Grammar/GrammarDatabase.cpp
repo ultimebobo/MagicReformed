@@ -1,6 +1,7 @@
 #include "GrammarDatabase.h"
 #include "../Input/Keys.h"
 #include "../Settings/ConfigManager.h"
+#include <algorithm>
 
 GrammarDatabase* GrammarDatabase::GetSingleton()
 {
@@ -13,9 +14,7 @@ GrammarDatabase* GrammarDatabase::GetSingleton()
 
 void GrammarDatabase::LoadConfiguration()
 {
-    // Load config file
     ConfigManager* configMgr = ConfigManager::GetSingleton();
-    configMgr->LoadConfigFile();
 
     // Load Schools of Magic
     _schoolMap.clear();
@@ -87,4 +86,29 @@ Level GrammarDatabase::GetLevel(uint32_t keycode)
     }
 
     return Level::None;
+}
+
+std::vector<uint32_t> GrammarDatabase::GetAllGrammarKeys() const
+{
+    std::vector<uint32_t> keys;
+
+    // Collect all keys from all grammar maps
+    for (const auto& [keyCode, _] : _schoolMap) {
+        keys.push_back(keyCode);
+    }
+    for (const auto& [keyCode, _] : _deliveryMap) {
+        keys.push_back(keyCode);
+    }
+    for (const auto& [keyCode, _] : _levelMap) {
+        keys.push_back(keyCode);
+    }
+    for (const auto& [keyCode, _] : _elementMap) {
+        keys.push_back(keyCode);
+    }
+
+    // Deduplicate and sort
+    std::sort(keys.begin(), keys.end());
+    keys.erase(std::unique(keys.begin(), keys.end()), keys.end());
+
+    return keys;
 }

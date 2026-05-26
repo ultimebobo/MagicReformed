@@ -22,6 +22,9 @@ const std::unordered_map<std::string, uint32_t> ConfigManager::KEY_MAP = {
 ConfigManager* ConfigManager::GetSingleton()
 {
     static ConfigManager singleton;
+    if (!singleton._isLoaded) {
+        singleton.LoadConfigFile();
+    }
     return std::addressof(singleton);
 }
 
@@ -30,7 +33,7 @@ bool ConfigManager::LoadConfigFile()
     CSimpleIniA ini;
     ini.SetUnicode();
 
-    SI_Error rc = ini.LoadFile("MagicReformed.ini");
+    SI_Error rc = ini.LoadFile("Data/SKSE/Plugins/MagicReformed.ini");
     if (rc < 0) {
         return false; // File not found or error reading
     }
@@ -51,9 +54,10 @@ bool ConfigManager::LoadConfigFile()
         }
     }
 
-    _displayAllNotifications = GetBool("General", "DisplayNotifications", false);
-    _displayResolvedSpell = GetBool("General", "DisplaySpell", false);
     _isLoaded = true;
+    _displayAllNotifications = GetBool("General", "DisplayNotifications", false);
+    _displayResolvedSpell = GetBool("General", "DisplaySpell", true);
+
     return true;
 }
 
@@ -74,6 +78,7 @@ uint32_t ConfigManager::GetKeyCode(const std::string& section, const std::string
     }
 
     uint32_t keyCode = ParseKeyCode(keyIt->second);
+    SKSE::log::info("Config key [{}] in section [{}] has value [{}]. Parsed key code: {}.", key, section, keyIt->second, keyCode);
     return (keyCode != 0) ? keyCode : defaultValue;
 }
 
@@ -141,18 +146,4 @@ uint32_t ConfigManager::ParseKeyCode(const std::string& keyName)
     } catch (...) {
         return 0;
     }
-}
-
-std::string ConfigManager::KeyCodeToString(uint32_t keyCode)
-{
-    for (const auto& pair : KEY_MAP) {
-        if (pair.second == keyCode) {
-            return pair.first;
-        }
-    }
-
-    // Return hex format if not found in map
-    char buffer[16];
-    snprintf(buffer, sizeof(buffer), "0x%X", keyCode);
-    return std::string(buffer);
 }

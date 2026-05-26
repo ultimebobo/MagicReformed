@@ -2,6 +2,7 @@
 
 #include "GrammarTypes.h"
 #include <string>
+#include <vector>
 
 class GrammarDatabase
 {
@@ -15,6 +16,9 @@ public:
     Delivery GetDelivery(uint32_t keycode);
     School GetSchool(uint32_t keycode);
     Level GetLevel(uint32_t keycode);
+
+    // Get all magic input keys from grammar maps
+    std::vector<uint32_t> GetAllGrammarKeys() const;
 
 private:
     GrammarDatabase() = default;

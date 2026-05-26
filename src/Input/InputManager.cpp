@@ -2,31 +2,33 @@
 
 #include "../MagicMode/MagicModeManager.h"
 #include "../IncantationBuffer/IncantationBuffer.h"
+#include "../Settings/ConfigManager.h"
+#include "../Grammar/GrammarDatabase.h"
 #include "Keys.h"
 
+#include <algorithm>
+
 namespace logger = SKSE::log;
-
-
-// Default activation key
-constexpr uint32_t ACTIVATION_KEY = Keys::Numpad0;
-
-// Keys that can be used to write spells
-constexpr uint32_t magicKeys[] = {
-    Keys::Numpad1,
-    Keys::Numpad2,
-    Keys::Numpad3,
-    Keys::Numpad4,
-    Keys::Numpad5,
-    Keys::Numpad6,
-    Keys::Numpad7,
-    Keys::Numpad8,
-    Keys::Numpad9,
-    Keys::NumpadPlus
-};
 
 InputManager* InputManager::GetSingleton()
 {
     static InputManager singleton;
+    if (singleton._magicModeKey == 0) {
+        auto* config = ConfigManager::GetSingleton();
+        singleton._magicModeKey = config->GetKeyCode("General", "MagicMode", Keys::Numpad0);
+
+        // Get all grammar keys from the grammar database
+        auto* grammarDb = GrammarDatabase::GetSingleton();
+        singleton._magicKeys = grammarDb->GetAllGrammarKeys();
+
+        // Add the confirm key
+        uint32_t confirmKey = config->GetKeyCode("General", "ResolveSpell", Keys::NumpadPlus);
+        singleton._magicKeys.push_back(confirmKey);
+
+        // Deduplicate and sort
+        std::sort(singleton._magicKeys.begin(), singleton._magicKeys.end());
+        singleton._magicKeys.erase(std::unique(singleton._magicKeys.begin(), singleton._magicKeys.end()), singleton._magicKeys.end());
+    }
     return std::addressof(singleton);
 }
 
@@ -87,7 +89,7 @@ RE::BSEventNotifyControl InputManager::ProcessEvent(
             auto keyCode = buttonEvent->GetIDCode();
             auto* magicMode = MagicModeManager::GetSingleton();
             if (buttonEvent->IsDown() && actorState->IsWeaponDrawn()) {
-                if (keyCode == ACTIVATION_KEY) {
+                if (keyCode == _magicModeKey) {
                     if (magicMode->IsActive()) {
                         magicMode->Deactivate();
                     }
@@ -95,7 +97,7 @@ RE::BSEventNotifyControl InputManager::ProcessEvent(
                         magicMode->Activate();
                     }
                 }
-                else if (std::ranges::find(magicKeys, keyCode) != std::end(magicKeys) && magicMode->IsActive()) {
+                else if (std::find(_magicKeys.begin(), _magicKeys.end(), keyCode) != _magicKeys.end() && magicMode->IsActive()) {
                     auto* buffer = IncantationBuffer::GetSingleton();
                     buffer->PushKey(keyCode);
                 }

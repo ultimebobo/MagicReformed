@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 class InputManager :
     public RE::BSTEventSink<RE::InputEvent*>
 {
@@ -17,4 +19,7 @@ private:
     RE::WEAPON_STATE _previousWeaponState = RE::WEAPON_STATE::kSheathed;
 
     void HandleWeaponStateChange(RE::WEAPON_STATE weaponState);
+
+    uint32_t _magicModeKey = 0;
+    std::vector<uint32_t> _magicKeys;
 };

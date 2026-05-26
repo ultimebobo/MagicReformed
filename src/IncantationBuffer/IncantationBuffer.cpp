@@ -1,26 +1,29 @@
 #include "IncantationBuffer.h"
 #include "../SpellSelector/SpellSelector.h"
+#include "../Settings/ConfigManager.h"
 #include "../Input/Keys.h"
 
 namespace logger = SKSE::log;
 
-const uint32_t CONFIRM_KEY = Keys::NumpadPlus;
-
 IncantationBuffer* IncantationBuffer::GetSingleton()
 {
     static IncantationBuffer singleton;
+    if (singleton._confirmKey == 0) {
+        // Load confirm key from config
+        auto* config = ConfigManager::GetSingleton();
+        singleton._confirmKey = config->GetKeyCode("General", "ResolveSpell", Keys::NumpadPlus);
+    }
     return std::addressof(singleton);
 }
 
 void IncantationBuffer::PushKey(uint32_t keycode)
 {
-    if (keycode == CONFIRM_KEY) {
+    if (keycode == _confirmKey) {
         ConfirmSequence();
         return;
     }
 
     _sequence.push_back(keycode);
-    _lastInputTime = std::time(nullptr);
 }
 
 void IncantationBuffer::ConfirmSequence()
@@ -38,5 +41,4 @@ void IncantationBuffer::ConfirmSequence()
 void IncantationBuffer::Clear()
 {
     _sequence.clear();
-    _lastInputTime = std::time_t(0);
 }

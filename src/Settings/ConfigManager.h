@@ -21,9 +21,6 @@ public:
     // Helper to parse key name string to keycode
     static uint32_t ParseKeyCode(const std::string& keyName);
 
-    // Helper to convert keycode to key name
-    static std::string KeyCodeToString(uint32_t keyCode);
-
     bool shouldDisplayResolvedSpell() const { return _displayResolvedSpell; }
     bool shouldDisplayAllNotifications() const { return _displayAllNotifications; }
 
@@ -36,6 +33,6 @@ private:
     // Cache for loaded configuration
     std::unordered_map<std::string, std::unordered_map<std::string, std::string>> _config;
     bool _isLoaded = false;
-    bool _displayResolvedSpell = false;
+    bool _displayResolvedSpell = true;
     bool _displayAllNotifications = false;
 };
