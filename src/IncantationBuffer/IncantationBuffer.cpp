@@ -35,23 +35,6 @@ void IncantationBuffer::ConfirmSequence()
     Clear();
 }
 
-void IncantationBuffer::CancelSequence()
-{
-    if (_sequence.empty()) {
-        return;
-    }
-
-    logger::info("Sequence cancelled");
-    RE::DebugNotification("Incantation cancelled");
-
-    Clear();
-}
-
-bool IncantationBuffer::IsEmpty() const
-{
-    return _sequence.empty();
-}
-
 void IncantationBuffer::Clear()
 {
     _sequence.clear();

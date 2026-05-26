@@ -9,8 +9,6 @@ public:
 
     void PushKey(uint32_t keycode);
     void ConfirmSequence();
-    void CancelSequence();
-    bool IsEmpty() const;
 
 private:
     IncantationBuffer() = default;

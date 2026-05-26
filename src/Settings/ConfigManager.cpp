@@ -51,6 +51,8 @@ bool ConfigManager::LoadConfigFile()
         }
     }
 
+    _displayAllNotifications = GetBool("General", "DisplayNotifications", false);
+    _displayResolvedSpell = GetBool("General", "DisplaySpell", false);
     _isLoaded = true;
     return true;
 }
@@ -73,6 +75,43 @@ uint32_t ConfigManager::GetKeyCode(const std::string& section, const std::string
 
     uint32_t keyCode = ParseKeyCode(keyIt->second);
     return (keyCode != 0) ? keyCode : defaultValue;
+}
+
+bool ConfigManager::GetBool(const std::string& section, const std::string& key, bool defaultValue)
+{
+    if (!_isLoaded) {
+        return defaultValue;
+    }
+
+    auto sectionIt = _config.find(section);
+    if (sectionIt == _config.end()) {
+        return defaultValue;
+    }
+
+    auto keyIt = sectionIt->second.find(key);
+    if (keyIt == sectionIt->second.end()) {
+        return defaultValue;
+    }
+
+    std::string value = keyIt->second;
+    // Trim whitespace
+    value.erase(0, value.find_first_not_of(" \t\r\n"));
+    value.erase(value.find_last_not_of(" \t\r\n") + 1);
+
+    // Convert to lowercase for comparison
+    std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) { return std::tolower(c); });
+
+    // Check for true values
+    if (value == "true" || value == "1" || value == "yes" || value == "on") {
+        return true;
+    }
+
+    // Check for false values
+    if (value == "false" || value == "0" || value == "no" || value == "off") {
+        return false;
+    }
+
+    return defaultValue;
 }
 
 uint32_t ConfigManager::ParseKeyCode(const std::string& keyName)

@@ -1,6 +1,7 @@
 #include "SpellSelector.h"
 #include "../SpellSystem/SpellResolver.h"
 #include "../Grammar/IncantationParser.h"
+#include "../Settings/ConfigManager.h"
 
 #include <random>
 
@@ -18,9 +19,11 @@ void SpellSelector::EquipSpell(std::vector<uint32_t>& sequence) const
     auto* resolver = SpellResolver::GetSingleton();
     auto* spell = resolver->ResolveSpell(query);
     if (spell) {
-        logger::info("Resolved spell: {}", spell->GetName());
-        std::string notification = std::string("Resolved spell: ") + spell->GetName();
-        RE::DebugNotification(notification.c_str());
+        logger::info("Invoked spell: {}", spell->GetName());
+        if (ConfigManager::GetSingleton()->shouldDisplayResolvedSpell()) {
+            std::string notification = std::string("Invoked spell: ") + spell->GetName();
+            RE::DebugNotification(notification.c_str());
+        }
 
         auto player = RE::PlayerCharacter::GetSingleton();
         if (!player) return;
@@ -34,7 +37,9 @@ void SpellSelector::EquipSpell(std::vector<uint32_t>& sequence) const
         task->AddTask([equipManager, player, spell, rightSlot]() { equipManager->EquipSpell(player, spell, rightSlot); });
     }
     else {
-        logger::warn("Failed to resolve spell");
-        RE::DebugNotification("Failed to resolve spell");
+        logger::warn("Failed to invoke a spell");
+        if (ConfigManager::GetSingleton()->shouldDisplayAllNotifications()) {
+            RE::DebugNotification("Failed to invoke a spell");
+        }
     }
 }
