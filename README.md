@@ -14,7 +14,7 @@ Sound familiar? MagicReformed solves this.
 
 Use your numpad to input an "incantation":
 - **School of Magic** (Destruction, Conjuration, etc.)
-- **Delivery Type** (Projectile, Self, AoE, Concentration)
+- **Delivery Type** (Projectile, Self, AoE)
 - **Difficulty Level** (Novgice, Apprentice, Adept, Expert, Master)
 
 The plugin instantly finds a matching spell from your spell list and equips it. **No more menu crawling. No more clicking.** Just natural, keyboard-driven spell selection.

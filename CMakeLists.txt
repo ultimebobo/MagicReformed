@@ -42,6 +42,7 @@ add_commonlibsse_plugin(${PROJECT_NAME} SOURCES
     src/IncantationBuffer/IncantationBuffer.cpp
     src/Input/InputManager.cpp
     src/MagicMode/MagicModeManager.cpp
+    src/Settings/ConfigManager.cpp
     src/SpellSystem/SpellClassifier.cpp
     src/SpellSystem/SpellLogger.cpp
     src/SpellSystem/SpellResolver.cpp

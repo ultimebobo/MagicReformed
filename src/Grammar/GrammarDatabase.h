@@ -1,13 +1,15 @@
 #pragma once
 
 #include "GrammarTypes.h"
+#include <string>
 
 class GrammarDatabase
 {
 public:
     static GrammarDatabase* GetSingleton();
 
-    void Initialize();
+    // Load configuration from ini file and initialize
+    void LoadConfiguration();
 
     Element GetElement(uint32_t keycode);
     Delivery GetDelivery(uint32_t keycode);
