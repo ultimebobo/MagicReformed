@@ -37,7 +37,8 @@ void EquipmentSnapshot::RestoreHand(
 
         if (auto* spell = savedHand->As<RE::SpellItem>()) {
             if (spell != current->As<RE::SpellItem>()) {
-                equipManager->EquipSpell(player, spell, slot);
+                auto* task = SKSE::GetTaskInterface();
+                task->AddTask([equipManager, player, spell, slot]() { equipManager->EquipSpell(player, spell, slot); });
             }
         }
         else if (auto* object = savedHand->As<RE::TESBoundObject>()) {
@@ -45,7 +46,9 @@ void EquipmentSnapshot::RestoreHand(
             auto* otherHand = player->GetEquippedObject(!leftHand);
             if (countIt != inventoryCounts.end() && countIt->second > 0 // Item is still in inventory
                 && (savedHand != otherHand || countIt->second > 1)) { // Item is not equipped in the other hand, or there are multiple copies
-                equipManager->EquipObject(player, object, nullptr, 1, slot);
+                
+                auto* task = SKSE::GetTaskInterface();
+                task->AddTask([equipManager, player, object, slot]() { equipManager->EquipObject(player, object, nullptr, 1, slot); });
             }
         }
     }

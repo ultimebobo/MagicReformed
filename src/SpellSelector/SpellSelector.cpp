@@ -27,8 +27,11 @@ void SpellSelector::EquipSpell(std::vector<uint32_t>& sequence) const
 
         auto rightSlot = RE::TESForm::LookupByID<RE::BGSEquipSlot>(0x13F42);
         auto leftSlot = RE::TESForm::LookupByID<RE::BGSEquipSlot>(0x13F43);
-        RE::ActorEquipManager::GetSingleton()->EquipSpell(player, spell, leftSlot);
-        RE::ActorEquipManager::GetSingleton()->EquipSpell(player, spell, rightSlot);
+
+        auto* task = SKSE::GetTaskInterface();
+        auto  equipManager = RE::ActorEquipManager::GetSingleton();
+        task->AddTask([equipManager, player, spell, leftSlot]() { equipManager->EquipSpell(player, spell, leftSlot); });
+        task->AddTask([equipManager, player, spell, rightSlot]() { equipManager->EquipSpell(player, spell, rightSlot); });
     }
     else {
         logger::warn("Failed to resolve spell");
