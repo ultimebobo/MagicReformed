@@ -3,13 +3,17 @@
 #include "../Grammar/IncantationParser.h"
 #include "../Settings/ConfigManager.h"
 
-#include <random>
-
 namespace logger = SKSE::log;
 
 SpellSelector* SpellSelector::GetSingleton()
 {
     static SpellSelector singleton;
+    if (!singleton._rightSlot) {
+        singleton._rightSlot = RE::TESForm::LookupByID<RE::BGSEquipSlot>(0x13F42);
+    }
+    if (!singleton._leftSlot) {
+        singleton._leftSlot = RE::TESForm::LookupByID<RE::BGSEquipSlot>(0x13F43);
+    }
     return std::addressof(singleton);
 }
 
@@ -28,13 +32,11 @@ void SpellSelector::EquipSpell(std::vector<uint32_t>& sequence) const
         auto player = RE::PlayerCharacter::GetSingleton();
         if (!player) return;
 
-        auto rightSlot = RE::TESForm::LookupByID<RE::BGSEquipSlot>(0x13F42);
-        auto leftSlot = RE::TESForm::LookupByID<RE::BGSEquipSlot>(0x13F43);
+        auto equipManager = RE::ActorEquipManager::GetSingleton();
+        if (!equipManager) return;
 
-        auto* task = SKSE::GetTaskInterface();
-        auto  equipManager = RE::ActorEquipManager::GetSingleton();
-        task->AddTask([equipManager, player, spell, leftSlot]() { equipManager->EquipSpell(player, spell, leftSlot); });
-        task->AddTask([equipManager, player, spell, rightSlot]() { equipManager->EquipSpell(player, spell, rightSlot); });
+        equipManager->EquipSpell(player, spell, _leftSlot);
+        equipManager->EquipSpell(player, spell, _rightSlot);
     }
     else {
         logger::warn("Failed to invoke a spell");
